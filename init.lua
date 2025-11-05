@@ -240,6 +240,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'editorconfig/editorconfig-vim', -- Support for .editorconfig files
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -288,6 +289,12 @@ require('lazy').setup({
     lazy = false,
   },
   { 'tpope/vim-fugitive' },
+  {
+    'nvzone/typr',
+    dependencies = 'nvzone/volt',
+    opts = {},
+    cmd = { 'Typr', 'TyprStats' },
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -678,6 +685,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
+        -- elixirls = {},
         -- csharp_ls = {},
         pyright = {},
         -- rust_analyzer = {},
@@ -688,6 +696,19 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
+
+        terraformls = {},
+
+        -- Expert LSP for Elixir (uses 'lexical' as the server name in lspconfig)
+        -- Installation: https://github.com/elixir-lang/expert
+        lexical = {
+          cmd = { vim.fn.expand('~/.local/bin/expert/expert_darwing_arm64'), '--stdio' },
+          root_dir = function(fname)
+            return require('lspconfig').util.root_pattern('mix.exs', '.git')(fname) or vim.loop.cwd()
+          end,
+          filetypes = { 'elixir', 'eelixir', 'heex' },
+          settings = {},
+        },
 
         lua_ls = {
           -- cmd = { ... },
@@ -909,6 +930,17 @@ require('lazy').setup({
     },
   },
 
+  -- {
+  --   'nickkadutskyi/jb.nvim',
+  --   lazy = false,
+  --   priority = 1000,
+  --   opts = {},
+  --   config = function()
+  --     -- vim.o.background = 'light'
+  --     vim.cmd 'colorscheme jb'
+  --   end,
+  -- },
+
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
@@ -927,7 +959,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-moon'
+      vim.cmd.colorscheme 'tokyonight-storm'
     end,
   },
 
