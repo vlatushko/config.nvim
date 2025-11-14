@@ -419,11 +419,9 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          path_display = { 'smart' },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -702,7 +700,7 @@ require('lazy').setup({
         -- Expert LSP for Elixir (uses 'lexical' as the server name in lspconfig)
         -- Installation: https://github.com/elixir-lang/expert
         lexical = {
-          cmd = { vim.fn.expand('~/.local/bin/expert/expert_darwing_arm64'), '--stdio' },
+          cmd = { vim.fn.expand '~/.local/bin/expert/expert_darwing_arm64', '--stdio' },
           root_dir = function(fname)
             return require('lspconfig').util.root_pattern('mix.exs', '.git')(fname) or vim.loop.cwd()
           end,
