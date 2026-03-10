@@ -171,6 +171,23 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+vim.keymap.set('v', '<leader>gy', function()
+  local file = vim.fn.expand '%'
+  local l1 = vim.fn.line 'v'
+  local l2 = vim.fn.line '.'
+  if l1 > l2 then
+    l1, l2 = l2, l1
+  end
+  local text
+  if l1 == l2 then
+    text = file .. '#L' .. l1
+  else
+    text = file .. '#L' .. l1 .. '-L' .. l2
+  end
+  vim.fn.setreg('+', text)
+  print('Copied: ' .. text)
+end, { desc = 'Copy file path with line range' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
