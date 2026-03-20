@@ -120,7 +120,9 @@ end)
 
 -- Enable break indent
 vim.opt.breakindent = true
-vim.opt.textwidth = 80
+-- vim.opt.textwidth = 80
+-- vim.opt.formatoptions:append 'a'
+-- vim.opt.formatoptions:remove 'l'
 
 -- Save undo history
 vim.opt.undofile = true
@@ -188,6 +190,8 @@ vim.keymap.set('v', '<leader>gy', function()
   vim.fn.setreg('+', text)
   print('Copied: ' .. text)
 end, { desc = 'Copy file path with line range' })
+
+vim.keymap.set('n', '<leader>eh', '<cmd>edit %:h<CR>', { desc = '[E]dit [H]ere (file directory)' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -376,6 +380,7 @@ require('lazy').setup({
       spec = {
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
+        { '<leader>e', group = '[E]dit' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
@@ -671,7 +676,9 @@ require('lazy').setup({
         virtual_text = {
           source = 'if_many',
           spacing = 2,
-          format = function(diagnostic) return diagnostic.message end,
+          format = function(diagnostic)
+            return diagnostic.message
+          end,
         },
       }
 
