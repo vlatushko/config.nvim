@@ -700,19 +700,22 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
-        -- elixirls = {},
-        -- csharp_ls = {},
+        omnisharp = {},
         pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
 
         terraformls = {},
+
+        -- React/web stack. TypeScript itself is handled by typescript-tools.nvim below,
+        -- so `ts_ls` is deliberately absent.
+        eslint = {}, -- React Hooks + a11y lint, autofix on save
+        tailwindcss = {}, -- only attaches when a tailwind config is present
+        emmet_language_server = {}, -- `div.foo>p*3` expansion in JSX
+        cssmodules_ls = {}, -- go-to-definition on `styles.foo`
+        cssls = {},
+        html = {},
+        jsonls = {},
 
         -- Expert LSP for Elixir (uses 'lexical' as the server name in lspconfig)
         -- Installation: https://github.com/elixir-lang/expert
@@ -757,6 +760,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers)
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettierd', -- Used to format JS/TS/JSX/CSS/JSON
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -824,6 +828,15 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        scss = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
+        jsonc = { 'prettierd', 'prettier', stop_after_first = true },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -939,6 +952,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      vim.opt.background = 'dark'
       vim.cmd.colorscheme 'tokyonight-storm'
     end,
   },
@@ -1040,7 +1054,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
